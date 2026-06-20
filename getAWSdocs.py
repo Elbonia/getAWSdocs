@@ -2,26 +2,30 @@
 
 from bs4 import BeautifulSoup
 import os, argparse
-from urllib.parse import urlparse, urlsplit
+from urllib.parse import urljoin, urlparse, urlsplit
 from urllib.request import urlopen
 import json
+
+URL_TIMEOUT = 20
 
 def get_options():
   parser = argparse.ArgumentParser(description='AWS Documentation Downloader')
   parser.add_argument('-d','--documentation', help='Download the Documentation', action='store_true', required=False)
   parser.add_argument('-w','--whitepapers', help='Download White Papers', action='store_true', required=False)
   parser.add_argument('-f','--force', help='Overwrite old files', action='store_true', required=False)
-  args = vars(parser.parse_args())
-  return (args)
+  args = parser.parse_args()
+  if not args.documentation and not args.whitepapers:
+    parser.print_help()
+  return vars(args)
 
 # Build a list of the amazon PDF's
 def list_whitepaper_pdfs(start_page):
-  html_page = urlopen(start_page)
+  html_page = urlopen(start_page, timeout=URL_TIMEOUT)
   # Parse the HTML page
   soup = BeautifulSoup(html_page, 'html.parser')
   pdfs =  set()
   print("Generating PDF list (this may take some time)")
-  for link in soup.findAll('a'):
+  for link in soup.find_all('a'):
     try:
       uri = link.get('href')
       print('URI: ', uri)
@@ -36,11 +40,11 @@ def list_whitepaper_pdfs(start_page):
 
 
 def find_pdfs_in_html(url):
-  html_page_doc = urlopen(url)
+  html_page_doc = urlopen(url, timeout=URL_TIMEOUT)
   soup_doc = BeautifulSoup(html_page_doc, 'html.parser')
   # Get the A tag from the parsed page
   pdfs = set()
-  for link in soup_doc.findAll('a'):
+  for link in soup_doc.find_all('a'):
     try:
       sub_url = link.get('href')
       if sub_url.endswith("pdf"):
@@ -50,51 +54,86 @@ def find_pdfs_in_html(url):
   return pdfs
 
 
+def get_guide_pdf(guide_url, base_url):
+  guide_info_url = urljoin(guide_url, "meta-inf/guide-info.json")
+  try:
+    print("Guide info url:", guide_info_url)
+    guide_info_doc = urlopen(guide_info_url, timeout=URL_TIMEOUT).read()
+    guide_info = json.loads(guide_info_doc)
+    if "pdf" in guide_info and guide_info["pdf"]:
+      return urljoin(base_url, guide_info["pdf"])
+  except:
+    return None
+  return None
+
+
+def list_guide_urls(service_url, base_url):
+  guide_urls = set()
+  service_page = urlopen(service_url, timeout=URL_TIMEOUT)
+  service_soup = BeautifulSoup(service_page, 'html.parser')
+  for guide_link in service_soup.find_all('a', href=True):
+    guide_url = urljoin(base_url, guide_link.get('href').split("?")[0])
+    if urlparse(guide_url).netloc == "docs.aws.amazon.com":
+      guide_urls.add(guide_url)
+  return guide_urls
+
+
 def list_docs_pdfs(start_page):
   locale_path = "en_us/"
-  base_url = "http://docs.aws.amazon.com"
+  base_url = "https://docs.aws.amazon.com"
 
-  page = urlopen(start_page)
+  page = urlopen(start_page, timeout=URL_TIMEOUT)
   soup = BeautifulSoup(page, "xml")
   pdfs =  set()
   print("Generating PDF list (this may take some time)")
 
-  for link in soup.findAll('service'):
+  service_links = soup.find_all('service')
+  if not service_links:
+    service_links = soup.find_all('list-card-item')
+  print("Found " + str(len(service_links)) + " documentation entries")
+
+  for link in service_links:
+    uri = link.get('href')
+    if not uri:
+      continue
+    print('URI: ', uri)
+    service_url = urljoin(base_url, uri.split("?")[0])
+    if urlparse(service_url).netloc != "docs.aws.amazon.com":
+      print("Skipping external URL: " + service_url)
+      continue
+
+    # Current docs pages expose PDFs through each guide's metadata file.
+    pdf_url = get_guide_pdf(service_url, base_url)
+    if pdf_url:
+      pdfs.add(pdf_url)
+
     try:
-      uri = link.get('href')
-      print('URI: ', uri)
-      # if service uri is .html then parse as HTML
-      if '.html' in uri:
-        url = base_url + uri
-        pdfs = pdfs.union(find_pdfs_in_html(url))
+      for guide_url in list_guide_urls(service_url, base_url):
+        pdf_url = get_guide_pdf(guide_url, base_url)
+        if pdf_url:
+          pdfs.add(pdf_url)
+    except Exception as exc:
+      # Older docs landing pages used XML tiles instead of HTML guide links.
+      try:
+        if not uri.startswith('http'):
+          url = base_url + uri.split("?")[0] + locale_path + "landing-page.xml"
+        else:
+          url = uri.split("?")[0]
+        sub_page_doc = urlopen(url, timeout=URL_TIMEOUT)
+        soup_doc = BeautifulSoup(sub_page_doc, 'xml')
+        for sublink in soup_doc.find_all('tile'):
+          try:
+            sub_url = sublink.get('href')
+            directory = base_url + "/".join(urlsplit(sub_url).path.split('/')[:-1])
+            pdf_url = get_guide_pdf(directory + "/", base_url)
+            if pdf_url:
+              pdfs.add(pdf_url)
+          except:
+            continue
+      except:
+        print("Skipping " + service_url + " - " + str(exc))
         continue
-
-      # if service uri ends with "/" find and parse xml landing page
-      if not uri.startswith('http'):
-        url = base_url + uri.split("?")[0] + locale_path + "landing-page.xml"
-      
-      # Fetch the XML sub page (this is where the links to the pdf's live)
-      sub_page_doc = urlopen(url)
-      soup_doc = BeautifulSoup(sub_page_doc, 'xml')
-      
-      # Get the "tile" tag from the parsed page
-      for sublink in soup_doc.findAll('tile'):
-        try:
-          sub_url = sublink.get('href')
-          directory = base_url + "/".join(urlsplit(sub_url).path.split('/')[:-1])
-
-          guide_info_url = directory + "/meta-inf/guide-info.json"
-          print("Guide info url:", guide_info_url)
-          guide_info_doc = urlopen(guide_info_url).read()
-          guide_info = json.loads(guide_info_doc)
-
-          if "pdf" in guide_info:
-            pdf_url = directory + "/" + guide_info["pdf"]
-            pdfs.add(pdf_url)
-        except:
-          continue
-    except:
-     continue
+  print("Found " + str(len(pdfs)) + " documentation PDFs")
   return pdfs
 
 
@@ -107,7 +146,7 @@ def save_pdf(full_dir,filename,i):
     if i.startswith("//"):
       i = "http:" + i
     print("Downloading : " + i)
-    web = urlopen(i)
+    web = urlopen(i, timeout=URL_TIMEOUT)
     print("Saving to : " + file_loc)
     # Save Data to disk
     output = open(file_loc,'wb')
@@ -137,22 +176,30 @@ def get_pdfs(pdf_list, force):
     except:
       continue
 
-# Main
-args = get_options()
-# allow user to overwrite files
-force = args['force']
-if args['documentation']:
-  print("Downloading Docs")
-  pdf_list = list_docs_pdfs("https://docs.aws.amazon.com/en_us/main-landing-page.xml")
-  get_pdfs(pdf_list, force)
+def main():
+  args = get_options()
+  # allow user to overwrite files
+  force = args['force']
+  pdf_list = set()
+  if args['documentation']:
+    print("Downloading Docs")
+    docs_pdf_list = list_docs_pdfs("https://docs.aws.amazon.com/en_us/main-landing-page.xml")
+    pdf_list.update(docs_pdf_list)
+    get_pdfs(docs_pdf_list, force)
 
-if args['whitepapers']:
-  print("Downloading Whitepapaers")
-  pdf_list = list_whitepaper_pdfs("http://aws.amazon.com/whitepapers/")
-  get_pdfs(pdf_list, force)
-  print("Downloading SAP Whitepapaers")
-  pdf_list = list_whitepaper_pdfs("https://aws.amazon.com/sap/whitepapers/")
-  get_pdfs(pdf_list, force)
+  if args['whitepapers']:
+    print("Downloading Whitepapaers")
+    whitepaper_pdf_list = list_whitepaper_pdfs("http://aws.amazon.com/whitepapers/")
+    pdf_list.update(whitepaper_pdf_list)
+    get_pdfs(whitepaper_pdf_list, force)
+    print("Downloading SAP Whitepapaers")
+    sap_pdf_list = list_whitepaper_pdfs("https://aws.amazon.com/sap/whitepapers/")
+    pdf_list.update(sap_pdf_list)
+    get_pdfs(sap_pdf_list, force)
 
-for p in pdf_list:
-  print(p)
+  for p in pdf_list:
+    print(p)
+
+
+if __name__ == "__main__":
+  main()
