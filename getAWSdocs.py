@@ -60,21 +60,6 @@ def list_whitepaper_pdfs(start_page):
     return pdfs
 
 
-def find_pdfs_in_html(url):
-    html_page_doc = urlopen(url, timeout=URL_TIMEOUT)
-    soup_doc = BeautifulSoup(html_page_doc, "html.parser")
-    # Get the A tag from the parsed page
-    pdfs = set()
-    for link in soup_doc.find_all("a"):
-        try:
-            sub_url = link.get("href")
-            if sub_url.endswith("pdf"):
-                pdfs.add(sub_url)
-        except:
-            continue
-    return pdfs
-
-
 def get_guide_pdf(guide_url, base_url):
     guide_info_url = urljoin(guide_url, "meta-inf/guide-info.json")
     try:
