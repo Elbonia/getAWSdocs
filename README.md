@@ -2,7 +2,7 @@
 
 ## About
 
-One thing that strikes me as odd with Amazon and the documentation on AWS is that there is no download all button, to make it easy to get all the documentation in one go. After creating a simple bash script that kept breaking and needed updating, I decided to rewrite in python to make it a little easier to maintain. You can download Documentation and/or WhitePapers as PDFs. The script is now ported to Python3 (finally)!
+One thing that strikes me as odd with Amazon and the documentation on AWS is that there is no download all button, to make it easy to get all the documentation in one go. After creating a simple bash script that kept breaking and needed updating, I decided to rewrite in python to make it a little easier to maintain. You can download Documentation and/or WhitePapers. The script is now ported to Python3 (finally)!
 
 I hope some of you find this useful.
 
@@ -50,7 +50,7 @@ To get all whitepapers:
 
 Whitepapers are saved under `whitepapers/`.
 
-Files that exist on disk will not be re-downloaded (so by default only new sections/files are downloaded). To override this default and force re-download of files that exist on disk, use
+Files that exist on disk will not be re-downloaded (so by default only new sections/files are downloaded), whichever format you pick. To override this default and force re-download of files that exist on disk, use
 
 ```bash
 ./getAWSdocs.py -d -f
