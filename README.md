@@ -31,13 +31,16 @@ To get all documents as PDFs:
 
 Downloading all the docs (390+ at the time of writing) can take a very long time - potentially days. PDFs are saved under `documentation/`, mirroring the path of each guide on docs.aws.amazon.com.
 
-`-d` also takes an optional format. `-d pdf` is the same as a bare `-d`; `-d html` downloads the individual HTML pages of each guide instead, discovered from the guide's `sitemap.xml`, and saves them under `documentation/html/`:
+`-d` also takes an optional format. `-d pdf` is the same as a bare `-d`. The other two formats download the individual pages of each guide instead of one file per guide, discovered from the guide's `sitemap.xml`:
 
 ```
 ./getAWSdocs.py -d html
+./getAWSdocs.py -d md
 ```
 
-__Note:__ HTML mode downloads every page of every guide rather than one file per guide, so it pulls down orders of magnitude more files and takes much longer than the PDF run. Only the pages themselves are saved - stylesheets, images and scripts are not fetched and links are not rewritten, so the result is a text archive rather than a browsable offline copy.
+`-d html` saves the pages as HTML under `documentation/html/`. `-d md` fetches AWS' markdown rendition of each page (the same URL with `.md` in place of `.html`) and saves it under `documentation/markdown/`.
+
+__Note:__ Both of these download every page of every guide, so they pull down orders of magnitude more files and take much longer than the PDF run. For HTML, only the pages themselves are saved - stylesheets, images and scripts are not fetched and links are not rewritten, so the result is a text archive rather than a browsable offline copy. Markdown avoids that problem entirely and the files are smaller, so it is the better choice if you just want the text.
 
 To get all whitepapers:
 
