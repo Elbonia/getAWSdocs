@@ -2,19 +2,18 @@
 
 ## About
 
-One thing that strikes me as odd with Amazon and the documentation on AWS is that there is no download all button, to make it easy to get all the documentation in one go. After creating a simple bash script that kept breaking and needed updating, I decided to rewrite in python to make it a little easier to maintain. You can download Documentation and/or WhitePapers. The script is now pported to Python3 (finally)!
+One thing that strikes me as odd with Amazon and the documentation on AWS is that there is no download all button, to make it easy to get all the documentation in one go. After creating a simple bash script that kept breaking and needed updating, I decided to rewrite in python to make it a little easier to maintain. You can download Documentation and/or WhitePapers. The script is now ported to Python3 (finally)!
 
 I hope some of you find this useful.
 
 ## Requirements
 
-Make sure all these python modules are installed as well as Python3:
+Python3, plus two third party modules:
 
- - argparse
  - beautifulsoup4
- - urllib3+
- - urlparse3
- - lxml
+ - lxml (used for the `xml` parser beautifulsoup4 is asked for)
+
+Everything else the script imports - `argparse`, `json`, `os`, `urllib` - is in the standard library.
 
 example:
 
@@ -49,7 +48,9 @@ To get all whitepapers:
 ./getAWSdocs.py -w
 ```
 
-Files that exist on disk will not be re-downloaded (so by default only new sections/files are downloaded). To override this default and force re-download of files that exist on disk, use
+Whitepapers are saved under `whitepapers/`.
+
+Files that exist on disk will not be re-downloaded (so by default only new sections/files are downloaded), whichever format you pick. To override this default and force re-download of files that exist on disk, use
 
 ```bash
 ./getAWSdocs.py -d -f
@@ -57,6 +58,6 @@ Files that exist on disk will not be re-downloaded (so by default only new secti
 
 __Note:__ You can use a combination of -d and -w to download all documents at once.
 
-Thats it!
+That's it!
 
 Built by Ric: [@ric__harvey](https://twitter.com/ric__harvey)
