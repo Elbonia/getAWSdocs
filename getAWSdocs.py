@@ -16,8 +16,11 @@ def get_options():
     parser.add_argument(
         "-d",
         "--documentation",
-        help="Download the Documentation",
-        action="store_true",
+        help="Download the Documentation, optionally as 'pdf' (default) or 'html'",
+        nargs="?",
+        const="pdf",
+        default=None,
+        choices=["pdf", "html"],
         required=False,
     )
     parser.add_argument(
@@ -96,14 +99,29 @@ def list_guide_urls(service_url, base_url):
     return guide_urls
 
 
-def list_docs_pdfs(start_page):
+def get_guide_html_pages(guide_url, base_url):
+    sitemap_url = urljoin(guide_url, "sitemap.xml")
+    try:
+        sitemap_doc = urlopen(sitemap_url, timeout=URL_TIMEOUT).read()
+        soup = BeautifulSoup(sitemap_doc, "xml")
+        return {loc.text.strip() for loc in soup.find_all("loc") if loc.text}
+    except Exception:
+        return set()
+
+
+def get_guide_pdf_files(guide_url, base_url):
+    pdf_url = get_guide_pdf(guide_url, base_url)
+    return {pdf_url} if pdf_url else set()
+
+
+def list_docs_files(start_page, get_guide_files):
     locale_path = "en_us/"
     base_url = "https://docs.aws.amazon.com"
 
     page = urlopen(start_page, timeout=URL_TIMEOUT)
     soup = BeautifulSoup(page, "xml")
-    pdfs = set()
-    print("Generating PDF list (this may take some time)")
+    files = set()
+    print("Generating file list (this may take some time)")
 
     service_links = soup.find_all("service")
     if not service_links:
@@ -120,16 +138,12 @@ def list_docs_pdfs(start_page):
             print("Skipping external URL: " + service_url)
             continue
 
-        # Current docs pages expose PDFs through each guide's metadata file.
-        pdf_url = get_guide_pdf(service_url, base_url)
-        if pdf_url:
-            pdfs.add(pdf_url)
+        # Current docs pages expose PDFs/HTML through each guide's metadata.
+        files.update(get_guide_files(service_url, base_url))
 
         try:
             for guide_url in list_guide_urls(service_url, base_url):
-                pdf_url = get_guide_pdf(guide_url, base_url)
-                if pdf_url:
-                    pdfs.add(pdf_url)
+                files.update(get_guide_files(guide_url, base_url))
         except Exception as exc:
             # Older docs landing pages used XML tiles instead of HTML guide links.
             try:
@@ -147,16 +161,22 @@ def list_docs_pdfs(start_page):
                         directory = base_url + "/".join(
                             urlsplit(sub_url).path.split("/")[:-1]
                         )
-                        pdf_url = get_guide_pdf(directory + "/", base_url)
-                        if pdf_url:
-                            pdfs.add(pdf_url)
+                        files.update(get_guide_files(directory + "/", base_url))
                     except:
                         continue
             except:
                 print("Skipping " + service_url + " - " + str(exc))
                 continue
-    print("Found " + str(len(pdfs)) + " documentation PDFs")
-    return pdfs
+    print("Found " + str(len(files)) + " documentation files")
+    return files
+
+
+def list_docs_pdfs(start_page):
+    return list_docs_files(start_page, get_guide_pdf_files)
+
+
+def list_docs_html(start_page):
+    return list_docs_files(start_page, get_guide_html_pages)
 
 
 def save_pdf(full_dir, filename, i, force):
@@ -168,12 +188,12 @@ def save_pdf(full_dir, filename, i, force):
         if i.startswith("//"):
             i = "http:" + i
         print("Downloading : " + i)
-        web = urlopen(i, timeout=URL_TIMEOUT)
-        print("Saving to : " + file_loc)
-        # Save Data to disk
-        output = open(file_loc, "wb")
-        output.write(web.read())
-        output.close()
+        with urlopen(i, timeout=URL_TIMEOUT) as web:
+            print("Saving to : " + file_loc)
+            # Save Data to disk
+            with open(file_loc, "wb") as output:
+                output.write(web.read())
+                output.close()
     else:
         print(
             "Skipping "
@@ -182,7 +202,7 @@ def save_pdf(full_dir, filename, i, force):
         )
 
 
-def get_pdfs(pdf_list, force):
+def get_pdfs(pdf_list, force, html=False):
     for i in pdf_list:
         doc = i.split("/")
         doc_location = doc[3]
@@ -192,7 +212,7 @@ def get_pdfs(pdf_list, force):
             full_dir = "whitepapers/"
         else:
             # Set download dir and sub directories for documentation
-            full_dir = "documentation/"
+            full_dir = "documentation/html/" if html else "documentation/"
             directory = urlsplit(i).path.split("/")[:-1]
             for path in directory:
                 if path != "":
@@ -210,11 +230,14 @@ def main():
     pdf_list = set()
     if args["documentation"]:
         print("Downloading Docs")
-        docs_pdf_list = list_docs_pdfs(
-            "https://docs.aws.amazon.com/en_us/main-landing-page.xml"
-        )
-        pdf_list.update(docs_pdf_list)
-        get_pdfs(docs_pdf_list, force)
+        landing_page = "https://docs.aws.amazon.com/en_us/main-landing-page.xml"
+        is_html = args["documentation"] == "html"
+        if is_html:
+            docs_file_list = list_docs_html(landing_page)
+        else:
+            docs_file_list = list_docs_pdfs(landing_page)
+        pdf_list.update(docs_file_list)
+        get_pdfs(docs_file_list, force, html=is_html)
 
     if args["whitepapers"]:
         print("Downloading Whitepapaers")
