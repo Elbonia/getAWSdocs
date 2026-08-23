@@ -16,11 +16,11 @@ def get_options():
     parser.add_argument(
         "-d",
         "--documentation",
-        help="Download the Documentation, optionally as 'pdf' (default) or 'html'",
+        help="Download the Documentation, optionally as 'pdf' (default), 'html' or 'md'",
         nargs="?",
         const="pdf",
         default=None,
-        choices=["pdf", "html"],
+        choices=["pdf", "html", "md"],
         required=False,
     )
     parser.add_argument(
@@ -94,6 +94,15 @@ def get_guide_html_pages(guide_url, base_url):
         return set()
 
 
+def get_guide_md_pages(guide_url, base_url):
+    # AWS serves a markdown rendition of each page at the same path with a
+    # .md extension in place of .html.
+    return {
+        page[: -len(".html")] + ".md" if page.endswith(".html") else page
+        for page in get_guide_html_pages(guide_url, base_url)
+    }
+
+
 def get_guide_pdf_files(guide_url, base_url):
     pdf_url = get_guide_pdf(guide_url, base_url)
     return {pdf_url} if pdf_url else set()
@@ -164,6 +173,10 @@ def list_docs_html(start_page):
     return list_docs_files(start_page, get_guide_html_pages)
 
 
+def list_docs_md(start_page):
+    return list_docs_files(start_page, get_guide_md_pages)
+
+
 def save_pdf(full_dir, filename, i, force):
     if not os.path.exists(full_dir):
         os.makedirs(full_dir)
@@ -186,23 +199,31 @@ def save_pdf(full_dir, filename, i, force):
         )
 
 
-def html_filename(url):
-    """Map a documentation page URL onto a local .html filename."""
+# Per-page documentation modes: file extension and download directory.
+PAGE_MODES = {
+    "html": (".html", "documentation/html/"),
+    "md": (".md", "documentation/markdown/"),
+}
+
+
+def page_filename(url, extension):
+    """Map a documentation page URL onto a local filename."""
     filename = urlsplit(url).path.split("/")[-1]
     if not filename:
         # Directory-style URL, e.g. .../userguide/
-        return "index.html"
+        return "index" + extension
     if "." not in filename:
-        return filename + ".html"
+        return filename + extension
     return filename
 
 
-def get_pdfs(pdf_list, force, html=False):
+def get_pdfs(pdf_list, force, mode="pdf"):
+    extension, page_dir = PAGE_MODES.get(mode, (None, None))
     for i in pdf_list:
         doc = i.split("/")
         doc_location = doc[3]
-        if html:
-            filename = html_filename(i)
+        if extension:
+            filename = page_filename(i, extension)
         else:
             filename = urlsplit(i).path.split("/")[-1]
         # Set download dir for whitepapers
@@ -210,7 +231,7 @@ def get_pdfs(pdf_list, force, html=False):
             full_dir = "whitepapers/"
         else:
             # Set download dir and sub directories for documentation
-            full_dir = "documentation/html/" if html else "documentation/"
+            full_dir = page_dir or "documentation/"
             # Trailing "" for directory-style URLs is dropped along with the
             # filename, so the full path becomes the directory.
             directory = urlsplit(i).path.split("/")[:-1]
@@ -231,13 +252,15 @@ def main():
     if args["documentation"]:
         print("Downloading Docs")
         landing_page = "https://docs.aws.amazon.com/en_us/main-landing-page.xml"
-        is_html = args["documentation"] == "html"
-        if is_html:
+        mode = args["documentation"]
+        if mode == "html":
             docs_file_list = list_docs_html(landing_page)
+        elif mode == "md":
+            docs_file_list = list_docs_md(landing_page)
         else:
             docs_file_list = list_docs_pdfs(landing_page)
         pdf_list.update(docs_file_list)
-        get_pdfs(docs_file_list, force, html=is_html)
+        get_pdfs(docs_file_list, force, mode=mode)
 
     if args["whitepapers"]:
         print("Downloading Whitepapaers")
