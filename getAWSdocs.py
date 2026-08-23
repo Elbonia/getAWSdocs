@@ -55,7 +55,7 @@ def list_whitepaper_pdfs(start_page):
                 if uri.endswith("pdf"):
                     if "whitepapers" in uri or "enterprise-marketing" in uri:
                         pdfs.add(uri)
-        except:
+        except Exception:
             continue
     return pdfs
 
@@ -68,7 +68,7 @@ def get_guide_pdf(guide_url, base_url):
         guide_info = json.loads(guide_info_doc)
         if "pdf" in guide_info and guide_info["pdf"]:
             return urljoin(base_url, guide_info["pdf"])
-    except:
+    except Exception:
         return None
     return None
 
@@ -147,9 +147,9 @@ def list_docs_files(start_page, get_guide_files):
                             urlsplit(sub_url).path.split("/")[:-1]
                         )
                         files.update(get_guide_files(directory + "/", base_url))
-                    except:
+                    except Exception:
                         continue
-            except:
+            except Exception:
                 print("Skipping " + service_url + " - " + str(exc))
                 continue
     print("Found " + str(len(files)) + " documentation files")
@@ -219,7 +219,7 @@ def get_pdfs(pdf_list, force, html=False):
                     full_dir = full_dir + path + "/"
         try:
             save_pdf(full_dir, filename, i, force)
-        except:
+        except Exception:
             continue
 
 
