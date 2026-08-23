@@ -193,7 +193,6 @@ def save_pdf(full_dir, filename, i, force):
             # Save Data to disk
             with open(file_loc, "wb") as output:
                 output.write(web.read())
-                output.close()
     else:
         print(
             "Skipping "
@@ -202,17 +201,33 @@ def save_pdf(full_dir, filename, i, force):
         )
 
 
+def html_filename(url):
+    """Map a documentation page URL onto a local .html filename."""
+    filename = urlsplit(url).path.split("/")[-1]
+    if not filename:
+        # Directory-style URL, e.g. .../userguide/
+        return "index.html"
+    if "." not in filename:
+        return filename + ".html"
+    return filename
+
+
 def get_pdfs(pdf_list, force, html=False):
     for i in pdf_list:
         doc = i.split("/")
         doc_location = doc[3]
-        filename = urlsplit(i).path.split("/")[-1]
+        if html:
+            filename = html_filename(i)
+        else:
+            filename = urlsplit(i).path.split("/")[-1]
         # Set download dir for whitepapers
         if "whitepapers" in doc_location:
             full_dir = "whitepapers/"
         else:
             # Set download dir and sub directories for documentation
             full_dir = "documentation/html/" if html else "documentation/"
+            # Trailing "" for directory-style URLs is dropped along with the
+            # filename, so the full path becomes the directory.
             directory = urlsplit(i).path.split("/")[:-1]
             for path in directory:
                 if path != "":
