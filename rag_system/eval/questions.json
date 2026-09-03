@@ -498,6 +498,127 @@
       "primary_files": [
         "UsingMetadata.md"
       ]
+    },
+    {
+      "id": "s3-object-lambda-policies",
+      "difficulty": "hard",
+      "question": "How do S3 Object Lambda access points transform GET requests using AWS Lambda functions, and what IAM policy permissions must be attached to the supporting Lambda function and Object Lambda access point policy?",
+      "gold_files": [
+        "olap-policies.md",
+        "olap-create.md",
+        "olap-security.md"
+      ],
+      "primary_files": [
+        "olap-policies.md"
+      ]
+    },
+    {
+      "id": "replication-time-control",
+      "difficulty": "hard",
+      "question": "What is S3 Replication Time Control (RTC), what SLA does it provide for object replication across regions, and how are replication metrics monitored using CloudWatch?",
+      "gold_files": [
+        "replication-time-control.md",
+        "replication-metrics.md"
+      ],
+      "primary_files": [
+        "replication-time-control.md"
+      ]
+    },
+    {
+      "id": "s3-express-iam-security",
+      "difficulty": "hard",
+      "question": "How does authentication and access control differ for S3 Express One Zone directory buckets compared to standard S3 buckets, and what IAM actions control CreateSession authorization?",
+      "gold_files": [
+        "s3-express-security-iam.md",
+        "directory-bucket-bucket-policy.md"
+      ],
+      "primary_files": [
+        "s3-express-security-iam.md"
+      ]
+    },
+    {
+      "id": "access-grants-cross-account",
+      "difficulty": "hard",
+      "question": "How do S3 Access Grants support cross-account data sharing, and what trust relationship and IAM role configuration is required on the grant location in the secondary account?",
+      "gold_files": [
+        "access-grants-cross-accounts.md",
+        "access-grants-credentials.md"
+      ],
+      "primary_files": [
+        "access-grants-cross-accounts.md"
+      ]
+    },
+    {
+      "id": "storage-lens-export",
+      "difficulty": "hard",
+      "question": "How do you configure S3 Storage Lens daily metrics export to S3 or S3 Tables, and what permissions and bucket policy statements are required to allow Storage Lens to write metrics data?",
+      "gold_files": [
+        "storage-lens-s3-tables-export.md",
+        "storage-lens-access-management.md"
+      ],
+      "primary_files": [
+        "storage-lens-access-management.md"
+      ]
+    },
+    {
+      "id": "batch-ops-lambda-invocation",
+      "difficulty": "hard",
+      "question": "How do S3 Batch Operations invoke AWS Lambda functions to process millions of objects in parallel, what payload format does Batch Operations pass to the Lambda function, and what JSON response structure must Lambda return?",
+      "gold_files": [
+        "batch-ops-invoke-lambda.md",
+        "batch-ops-iam-role-policies.md"
+      ],
+      "primary_files": [
+        "batch-ops-invoke-lambda.md"
+      ]
+    },
+    {
+      "id": "s3-eventbridge-integration",
+      "difficulty": "hard",
+      "question": "How do S3 EventBridge notifications differ from Amazon SNS/SQS event notifications, how do you enable EventBridge directly on a bucket, and how are multi-destination event rules configured?",
+      "gold_files": [
+        "EventBridge.md",
+        "EventNotifications.md"
+      ],
+      "primary_files": [
+        "EventBridge.md"
+      ]
+    },
+    {
+      "id": "lifecycle-noncurrent-transitions",
+      "difficulty": "hard",
+      "question": "In S3 Lifecycle configuration, how do noncurrent version expiration and transition rules behave when managing versioned objects, and how do you specify noncurrent version retain count filters?",
+      "gold_files": [
+        "lifecycle-configuration-examples.md",
+        "lifecycle-expire-general-considerations.md"
+      ],
+      "primary_files": [
+        "lifecycle-configuration-examples.md"
+      ]
+    },
+    {
+      "id": "object-lock-compliance-override",
+      "difficulty": "hard",
+      "question": "How do you configure and manage S3 Object Lock retention periods, and what exact IAM permission (s3:BypassGovernanceRetention) is required to overwrite or delete objects in governance mode versus compliance mode?",
+      "gold_files": [
+        "object-lock-managing.md",
+        "object-lock.md"
+      ],
+      "primary_files": [
+        "object-lock-managing.md"
+      ]
+    },
+    {
+      "id": "mrap-request-routing",
+      "difficulty": "hard",
+      "question": "How does S3 Multi-Region Access Point (MRAP) request routing work across multiple AWS regions, how are traffic percentage controls configured for active-active setups, and what metrics track cross-region routing latency?",
+      "gold_files": [
+        "MultiRegionAccessPointRequestRouting.md",
+        "MrapFailover.md"
+      ],
+      "primary_files": [
+        "MultiRegionAccessPointRequestRouting.md"
+      ]
     }
   ]
 }
