@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "aws-docs-rag": {
+      "command": "/home/jmikhail/code/getAWSdocs/rag_system/.venv/bin/python",
+      "args": [
+        "/home/jmikhail/code/getAWSdocs/rag_system/rag_mcp_server.py",
+        "--transport",
+        "stdio",
+        "--default-limit",
+        "10"
+      ],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}",
+        "GOOGLE_API_KEY": "${GOOGLE_API_KEY}",
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
+      }
+    }
+  }
+}

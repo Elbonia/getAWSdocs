@@ -1,0 +1,935 @@
+{
+  "top_k": 5,
+  "results": {
+    "qwen3-0.6b": [
+      {
+        "recall": 0.5,
+        "primary_recall": 0.5,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "HostingWebsiteOnS3Setup.md",
+          "WebsiteHosting.md"
+        ],
+        "missed": [
+          "EnableWebsiteHosting.md",
+          "WebsiteAccessPermissionsReqd.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/WebsiteHosting.md",
+          "AmazonS3/latest/userguide/HostingWebsiteOnS3Setup.md",
+          "AmazonS3/latest/userguide/static-website-tutorials.md",
+          "Route53/latest/DeveloperGuide/getting-started-s3.md",
+          "AmazonS3/latest/userguide/website-hosting-amplify.md"
+        ],
+        "id": "static-website",
+        "difficulty": "easy",
+        "latency": 0.6940360069274902,
+        "top_score": 0.8686726407768097,
+        "score_spread": 0.03984149528564751
+      },
+      {
+        "recall": 0.5,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "bucketnamingrules.md"
+        ],
+        "missed": [
+          "BucketRestrictions.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/bucketnamingrules.md",
+          "AmazonS3/latest/userguide/UsingBucket.md",
+          "AmazonS3/latest/userguide/gpbucketnamespaces.md",
+          "AmazonS3/latest/userguide/s3-tables-buckets-naming.md",
+          "AmazonS3/latest/userguide/create-bucket-overview.md"
+        ],
+        "id": "bucket-naming",
+        "difficulty": "easy",
+        "latency": 0.16983342170715332,
+        "top_score": 0.8565752178356688,
+        "score_spread": 0.07640774025180264
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "PresignedUrlUploadObject.md",
+          "ShareObjectPreSignedURL.md",
+          "using-presigned-url.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/ShareObjectPreSignedURL.md",
+          "AmazonS3/latest/s3-outposts/S3OutpostsShareObjectPresignedURL.md",
+          "AmazonS3/latest/userguide/using-presigned-url.md",
+          "AmazonS3/latest/userguide/PresignedUrlUploadObject.md",
+          "AmazonS3/latest/userguide/download-objects.md"
+        ],
+        "id": "presigned-url",
+        "difficulty": "easy",
+        "latency": 0.17246532440185547,
+        "top_score": 0.8304233311299902,
+        "score_spread": 0.06071247109352207
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "Versioning.md",
+          "manage-versioning-examples.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/manage-versioning-examples.md",
+          "AmazonS3/latest/s3-outposts/S3OutpostsManagingVersioning.md",
+          "AmazonS3/latest/userguide/versioning-workflows.md",
+          "AmazonS3/latest/userguide/Versioning.md",
+          "AmazonS3/latest/developerguide/s3_example_s3_PutBucketVersioning_section.md"
+        ],
+        "id": "enable-versioning",
+        "difficulty": "easy",
+        "latency": 0.19442963600158691,
+        "top_score": 0.876035245885178,
+        "score_spread": 0.06260227417378861
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "ManageCorsUsing.md",
+          "cors-troubleshooting.md",
+          "cors.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/cors.md",
+          "AmazonS3/latest/userguide/s3config-storagebrowser.md",
+          "AmazonS3/latest/userguide/enabling-cors-examples.md",
+          "AmazonS3/latest/userguide/ManageCorsUsing.md",
+          "AmazonS3/latest/userguide/cors-troubleshooting.md"
+        ],
+        "id": "cors",
+        "difficulty": "easy",
+        "latency": 0.18669676780700684,
+        "top_score": 0.8570447018788983,
+        "score_spread": 0.045656907218412535
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "transfer-acceleration-getting-started.md",
+          "transfer-acceleration.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/transfer-acceleration-getting-started.md",
+          "AmazonS3/latest/userguide/transfer-acceleration.md",
+          "AmazonS3/latest/userguide/transfer-acceleration-examples.md",
+          "AmazonS3/latest/API/API_AccelerateConfiguration.md",
+          "AmazonS3/latest/API/API_GetBucketAccelerateConfiguration.md"
+        ],
+        "id": "transfer-acceleration",
+        "difficulty": "easy",
+        "latency": 0.18620967864990234,
+        "top_score": 0.834109138653048,
+        "score_spread": 0.10199824346204733
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "ObjectsinRequesterPaysBuckets.md",
+          "RequesterPaysBuckets.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/RequesterPaysBuckets.md",
+          "AmazonS3/latest/userguide/RequesterPaysExamples.md",
+          "AmazonS3/latest/userguide/ObjectsinRequesterPaysBuckets.md",
+          "athena/latest/ug/notebooks-spark-requester-pays.md",
+          "AmazonS3/latest/API/API_GetBucketRequestPayment.md"
+        ],
+        "id": "requester-pays",
+        "difficulty": "easy",
+        "latency": 0.18033742904663086,
+        "top_score": 0.8307296137708637,
+        "score_spread": 0.04237259383546832
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "ServerLogs.md",
+          "enable-server-access-logging.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/enable-server-access-logging.md",
+          "AmazonS3/latest/userguide/ServerLogs.md",
+          "AmazonS3/latest/userguide/LoggingWebsiteTraffic.md",
+          "AmazonS3/latest/userguide/logging-with-S3.md",
+          "securityhub/latest/userguide/s3-controls.md"
+        ],
+        "id": "server-access-logging",
+        "difficulty": "easy",
+        "latency": 0.19013452529907227,
+        "top_score": 0.8868163853598481,
+        "score_spread": 0.08400335452307606
+      },
+      {
+        "recall": 0.3333333333333333,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "storage-class-intro.md"
+        ],
+        "missed": [
+          "glacier-storage-classes.md",
+          "intelligent-tiering.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/storage-class-intro.md",
+          "AmazonS3/latest/userguide/Welcome.md",
+          "AmazonS3/latest/API/API_s3Buckets_StorageClassConfiguration.md",
+          "AmazonS3/latest/userguide/WhatsNew.md",
+          "AmazonS3/latest/userguide/cost-optimization.md"
+        ],
+        "id": "storage-classes",
+        "difficulty": "medium",
+        "latency": 0.18473029136657715,
+        "top_score": 0.7895993701533686,
+        "score_spread": 0.04615657264441042
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "mpuoverview.md",
+          "qfacts.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/qfacts.md",
+          "AmazonS3/latest/userguide/s3-express-using-multipart-upload.md",
+          "AmazonS3/latest/userguide/mpuoverview.md",
+          "AmazonS3/latest/API/API_ListParts.md",
+          "AmazonS3/latest/userguide/mpu-upload-object.md"
+        ],
+        "id": "mpu-limits",
+        "difficulty": "medium",
+        "latency": 0.1825394630432129,
+        "top_score": 0.8831453323281738,
+        "score_spread": 0.16168479467877583
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "access-control-block-public-access.md",
+          "configuring-block-public-access-account.md",
+          "configuring-block-public-access-bucket.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/access-control-block-public-access.md",
+          "AmazonS3/latest/userguide/configuring-block-public-access-account.md",
+          "AmazonS3/latest/userguide/access-points-bpa-settings.md",
+          "guardduty/latest/APIReference/API_AccountLevelPermissions.md",
+          "AmazonS3/latest/userguide/configuring-block-public-access-bucket.md"
+        ],
+        "id": "block-public-access",
+        "difficulty": "medium",
+        "latency": 0.18441176414489746,
+        "top_score": 0.8417104846205837,
+        "score_spread": 0.03355184101537989
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "object-lock-configure.md",
+          "object-lock-managing.md",
+          "object-lock.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/object-lock.md",
+          "AmazonS3/latest/userguide/object-lock-managing.md",
+          "AmazonS3/latest/userguide/object-lock-configure.md",
+          "AmazonS3/latest/API/API_control_S3Retention.md",
+          "AmazonS3/latest/API/API_ObjectLockRetention.md"
+        ],
+        "id": "object-lock-modes",
+        "difficulty": "medium",
+        "latency": 0.19054889678955078,
+        "top_score": 0.8182036076984448,
+        "score_spread": 0.0584119274267455
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "checking-object-integrity-upload.md",
+          "checking-object-integrity.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/checking-object-integrity-upload.md",
+          "AmazonS3/latest/userguide/checking-object-integrity.md",
+          "AmazonS3/latest/API/API_control_S3ComputeObjectChecksumOperation.md",
+          "AmazonS3/latest/API/API_Checksum.md",
+          "AmazonS3/latest/API/API_PutObject.md"
+        ],
+        "id": "checksums",
+        "difficulty": "medium",
+        "latency": 0.19095301628112793,
+        "top_score": 0.913205434442021,
+        "score_spread": 0.09925941749078704
+      },
+      {
+        "recall": 0.6666666666666666,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "EventNotifications.md",
+          "notification-how-to-event-types-and-destinations.md"
+        ],
+        "missed": [
+          "how-to-enable-disable-notification-intro.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/notification-how-to-event-types-and-destinations.md",
+          "AmazonS3/latest/userguide/EventNotifications.md",
+          "AmazonS3/latest/userguide/enable-event-notifications.md",
+          "sns/latest/dg/sns-event-destinations.md",
+          "sns/latest/dg/sns-event-sources-and-destinations.md"
+        ],
+        "id": "event-notifications",
+        "difficulty": "medium",
+        "latency": 0.19261956214904785,
+        "top_score": 0.7528844030028234,
+        "score_spread": 0.08213331624170495
+      },
+      {
+        "recall": 0.5,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "ServerSideEncryptionCustomerKeys.md",
+          "UsingDSSEncryption.md",
+          "UsingKMSEncryption.md"
+        ],
+        "missed": [
+          "UsingEncryption.md",
+          "UsingServerSideEncryption.md",
+          "serv-side-encryption.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/UsingDSSEncryption.md",
+          "AmazonS3/latest/userguide/UsingKMSEncryption.md",
+          "AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.md",
+          "AmazonS3/latest/userguide/s3-tables-encryption.md",
+          "AmazonS3/latest/userguide/specifying-dsse-encryption.md"
+        ],
+        "id": "encryption-options",
+        "difficulty": "medium",
+        "latency": 0.19426894187927246,
+        "top_score": 0.7908479148445285,
+        "score_spread": 0.02710492658127228
+      },
+      {
+        "recall": 0.5,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 0.5,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "mpu-abort-incomplete-mpu-lifecycle-config.md",
+          "mpuoverview.md"
+        ],
+        "missed": [
+          "abort-mpu.md",
+          "list-mpu.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/storage-lens-optimize-storage.md",
+          "AmazonS3/latest/userguide/mpuoverview.md",
+          "AmazonS3/latest/userguide/s3-express-using-multipart-upload.md",
+          "AmazonS3/latest/userguide/storage_lens_metrics_glossary.md",
+          "AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.md"
+        ],
+        "id": "abort-incomplete-mpu",
+        "difficulty": "hard",
+        "latency": 0.18274855613708496,
+        "top_score": 0.6867238344783029,
+        "score_spread": 0.0803632710021871
+      },
+      {
+        "recall": 0.25,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "lifecycle-transition-general-considerations.md"
+        ],
+        "missed": [
+          "intro-lifecycle-rules.md",
+          "lifecycle-expire-general-considerations.md",
+          "object-lifecycle-mgmt.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/lifecycle-transition-general-considerations.md",
+          "AmazonS3/latest/API/API_Transition.md",
+          "AmazonS3/latest/API/API_control_Transition.md",
+          "securityhub/1.0/APIReference/API_AwsS3BucketBucketLifecycleConfigurationRulesTransitionsDetails.md",
+          "securityhub/1.0/APIReference/API_AwsS3BucketBucketLifecycleConfigurationRulesNoncurrentVersionTransitionsDetails.md"
+        ],
+        "id": "lifecycle-transitions",
+        "difficulty": "hard",
+        "latency": 0.1889348030090332,
+        "top_score": 0.7055800936165993,
+        "score_spread": 0.04840137667814581
+      },
+      {
+        "recall": 0.5,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "replication-config-for-kms-objects.md",
+          "replication-what-is-isnot-replicated.md"
+        ],
+        "missed": [
+          "delete-marker-replication.md",
+          "s3-batch-replication-batch.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/replication-config-for-kms-objects.md",
+          "AmazonS3/latest/userguide/replication-what-is-isnot-replicated.md",
+          "AmazonS3/latest/userguide/replication-troubleshoot.md",
+          "AmazonS3/latest/userguide/replication-add-config.md",
+          "AmazonS3/latest/userguide/replication-walkthrough-2.md"
+        ],
+        "id": "crr-kms",
+        "difficulty": "hard",
+        "latency": 0.2032794952392578,
+        "top_score": 0.7547790489340651,
+        "score_spread": 0.04211126328386916
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.8,
+        "distinct_files": 5,
+        "found": [
+          "archived-objects.md",
+          "glacier-storage-classes.md",
+          "restoring-objects-retrieval-options.md",
+          "restoring-objects.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/restoring-objects.md",
+          "AmazonS3/latest/userguide/archival-storage.md",
+          "AmazonS3/latest/userguide/archived-objects.md",
+          "AmazonS3/latest/userguide/glacier-storage-classes.md",
+          "AmazonS3/latest/userguide/restoring-objects-retrieval-options.md"
+        ],
+        "id": "glacier-restore",
+        "difficulty": "hard",
+        "latency": 0.19879889488220215,
+        "top_score": 0.8668096226750707,
+        "score_spread": 0.0356621764905245
+      },
+      {
+        "recall": 0.75,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 0.5,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "DeletingObjectVersions.md",
+          "DeletingObjectsfromVersioningSuspendedBuckets.md",
+          "ManagingDelMarkers.md"
+        ],
+        "missed": [
+          "DeleteMarker.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/troubleshooting-versioning.md",
+          "AmazonS3/latest/userguide/ManagingDelMarkers.md",
+          "AmazonS3/latest/userguide/DeletingObjectVersions.md",
+          "AmazonS3/latest/userguide/DeletingObjectsfromVersioningSuspendedBuckets.md",
+          "AmazonS3/latest/API/API_DeleteObjects.md"
+        ],
+        "id": "delete-versioned",
+        "difficulty": "hard",
+        "latency": 0.18664288520812988,
+        "top_score": 0.8498151758330663,
+        "score_spread": 0.06264731533563883
+      },
+      {
+        "recall": 0.3333333333333333,
+        "primary_recall": 0.5,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "MrapFailover.md"
+        ],
+        "missed": [
+          "MultiRegionAccessPointRequestRouting.md",
+          "MultiRegionAccessPoints.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/MrapFailover.md",
+          "AmazonS3/latest/userguide/UsingFailover.md",
+          "AmazonS3/latest/userguide/FailoverConfiguration.md",
+          "AmazonS3/latest/userguide/mrap-failover-errors.md",
+          "AmazonS3/latest/API/API_control_GetMultiRegionAccessPointRoutes.md"
+        ],
+        "id": "mrap-failover",
+        "difficulty": "hard",
+        "latency": 0.20195913314819336,
+        "top_score": 0.8579081508333606,
+        "score_spread": 0.10477639878790568
+      },
+      {
+        "recall": 0.6666666666666666,
+        "primary_recall": 0.5,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "about-object-ownership.md",
+          "object-ownership-existing-bucket.md"
+        ],
+        "missed": [
+          "ensure-object-ownership.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/object-ownership-existing-bucket.md",
+          "AmazonS3/latest/userguide/about-object-ownership.md",
+          "AmazonS3/latest/userguide/storage-lens-access-management.md",
+          "AmazonS3/latest/userguide/object-ownership-migrating-acls-prerequisites.md",
+          "AmazonS3/latest/userguide/object-ownership-new-bucket.md"
+        ],
+        "id": "object-ownership-acls",
+        "difficulty": "hard",
+        "latency": 0.19426584243774414,
+        "top_score": 0.8701091062062638,
+        "score_spread": 0.024531817785249932
+      },
+      {
+        "recall": 0.3333333333333333,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 0.25,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "MultiFactorAuthenticationDelete.md"
+        ],
+        "missed": [
+          "DeletingObjectVersions.md",
+          "Versioning.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/UsingMFADelete.md",
+          "IAM/latest/UserGuide/id_credentials_mfa_configure-api-require.md",
+          "AmazonS3/latest/userguide/DeletingObjects.md",
+          "AmazonS3/latest/userguide/MultiFactorAuthenticationDelete.md",
+          "securityhub/latest/userguide/exposure-s3-bucket.md"
+        ],
+        "id": "mfa-delete-protection",
+        "difficulty": "hard",
+        "latency": 0.19620490074157715,
+        "top_score": 0.8533837875905118,
+        "score_spread": 0.06789758979207672
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "batch-ops-create-job.md",
+          "batch-ops-iam-role-policies.md",
+          "batch-ops.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/batch-ops.md",
+          "AmazonS3/latest/userguide/batch-ops-iam-role-policies.md",
+          "lambda/latest/dg/services-s3-batch.md",
+          "AmazonS3/latest/userguide/batch-ops-operations.md",
+          "AmazonS3/latest/userguide/batch-ops-create-job.md"
+        ],
+        "id": "batch-ops-iam",
+        "difficulty": "hard",
+        "latency": 0.18729209899902344,
+        "top_score": 0.8113320493521442,
+        "score_spread": 0.036092299337954326
+      },
+      {
+        "recall": 0.3333333333333333,
+        "primary_recall": 0.0,
+        "hit": 1.0,
+        "mrr": 0.3333333333333333,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "storage-lens-cloudwatch-metrics-dimensions.md"
+        ],
+        "missed": [
+          "storage-lens-cloudwatch-enable-publish-option.md",
+          "storage-lens-groups-overview.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/storage_lens.md",
+          "AmazonS3/latest/userguide/storage_lens_view_metrics.md",
+          "AmazonS3/latest/userguide/storage-lens-cloudwatch-metrics-dimensions.md",
+          "AmazonS3/latest/userguide/storage-lens-cloudwatch-monitoring-cloudwatch.md",
+          "AmazonS3/latest/userguide/storage_lens_view_metrics_cloudwatch.md"
+        ],
+        "id": "storage-lens-metrics",
+        "difficulty": "hard",
+        "latency": 0.19439363479614258,
+        "top_score": 0.8597234940027522,
+        "score_spread": 0.02032404314728853
+      },
+      {
+        "recall": 0.6666666666666666,
+        "primary_recall": 0.5,
+        "hit": 1.0,
+        "mrr": 0.5,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "s3-express-Endpoints.md",
+          "s3-express-authenticating-authorizing.md"
+        ],
+        "missed": [
+          "s3-express-networking.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/directory-bucket-high-performance.md",
+          "AmazonS3/latest/userguide/s3-express-authenticating-authorizing.md",
+          "AmazonS3/latest/userguide/directory-bucket-create.md",
+          "AmazonS3/latest/userguide/endpoint-directory-buckets-AZ.md",
+          "AmazonS3/latest/userguide/s3-express-Endpoints.md"
+        ],
+        "id": "s3-express-networking",
+        "difficulty": "hard",
+        "latency": 0.18876409530639648,
+        "top_score": 0.8232000643993224,
+        "score_spread": 0.053970195837589996
+      },
+      {
+        "recall": 0.3333333333333333,
+        "primary_recall": 0.5,
+        "hit": 1.0,
+        "mrr": 0.5,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "access-grants-concepts.md"
+        ],
+        "missed": [
+          "access-grants-credentials.md",
+          "access-grants-grant-create.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/access-grants-directory-ids.md",
+          "AmazonS3/latest/userguide/access-grants-concepts.md",
+          "AmazonS3/latest/userguide/access-grants-get-started.md",
+          "AmazonS3/latest/userguide/access-grants-grant.md",
+          "AmazonS3/latest/userguide/access-grants.md"
+        ],
+        "id": "access-grants-iam",
+        "difficulty": "hard",
+        "latency": 0.18578362464904785,
+        "top_score": 0.8815893846939705,
+        "score_spread": 0.07951230234706852
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.6,
+        "distinct_files": 5,
+        "found": [
+          "configure-inventory.md",
+          "storage-inventory-athena-query.md",
+          "storage-inventory.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/storage-inventory.md",
+          "AmazonS3/latest/userguide/storage-inventory-athena-query.md",
+          "AmazonS3/latest/userguide/configure-inventory.md",
+          "AmazonS3/latest/userguide/tutorial-s3-batchops-lambda-mediaconvert-video.md",
+          "AmazonS3/latest/API/API_GetBucketInventoryConfiguration.md"
+        ],
+        "id": "storage-inventory-athena",
+        "difficulty": "hard",
+        "latency": 0.18801355361938477,
+        "top_score": 0.8685867752925188,
+        "score_spread": 0.11297247636320817
+      },
+      {
+        "recall": 0.3333333333333333,
+        "primary_recall": 0.5,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "access-points-policies.md"
+        ],
+        "missed": [
+          "access-points.md",
+          "creating-access-points.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/access-points-policies.md",
+          "AmazonS3/latest/userguide/example-bucket-policies-vpc-endpoint.md",
+          "AmazonS3/latest/userguide/access-points-vpc.md",
+          "AmazonS3/latest/userguide/privatelink-interface-endpoints.md",
+          "AmazonS3/latest/userguide/access-management.md"
+        ],
+        "id": "access-points-vpc",
+        "difficulty": "hard",
+        "latency": 0.1921989917755127,
+        "top_score": 0.8241545556730006,
+        "score_spread": 0.03291404955511057
+      },
+      {
+        "recall": 0.6666666666666666,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "s3-select-sql-reference-select.md",
+          "selecting-content-from-objects.md"
+        ],
+        "missed": [
+          "s3-select-sql-reference-keyword-list.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/selecting-content-from-objects.md",
+          "AmazonS3/latest/API/API_SelectObjectContent.md",
+          "AmazonS3/latest/userguide/s3-select-sql-reference-select.md",
+          "AmazonS3/latest/API/API_SelectParameters.md",
+          "AmazonS3/latest/userguide/using-select.md"
+        ],
+        "id": "s3-select-sql",
+        "difficulty": "hard",
+        "latency": 0.19540953636169434,
+        "top_score": 0.8201735793542374,
+        "score_spread": 0.08362253131620878
+      },
+      {
+        "recall": 0.6666666666666666,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "GettingStartedS3CLI.md",
+          "upload-objects.md"
+        ],
+        "missed": [
+          "GetStartedWithS3.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/GettingStartedS3CLI.md",
+          "AmazonS3/latest/userguide/put-object-ap.md",
+          "AmazonS3/latest/userguide/directory-buckets-objects-upload.md",
+          "AmazonS3/latest/userguide/upload-objects.md",
+          "AmazonS3/latest/userguide/uploading-downloading-objects.md"
+        ],
+        "id": "upload-file",
+        "difficulty": "easy",
+        "latency": 0.19582414627075195,
+        "top_score": 0.7892310034434368,
+        "score_spread": 0.03033717439613548
+      },
+      {
+        "recall": 0.5,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "CostAllocTagging.md"
+        ],
+        "missed": [
+          "BucketBilling.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/CostAllocTagging.md",
+          "AmazonS3/latest/userguide/tagging.md",
+          "awsaccountbilling/latest/aboutv2/cost-alloc-tags.md",
+          "AmazonS3/latest/userguide/buckets-tagging.md",
+          "awsaccountbilling/latest/aboutv2/account-tags-cost-allocation.md"
+        ],
+        "id": "bucket-tagging",
+        "difficulty": "easy",
+        "latency": 0.19143128395080566,
+        "top_score": 0.8863174683065004,
+        "score_spread": 0.10156691452724187
+      },
+      {
+        "recall": 0.5,
+        "primary_recall": 0.5,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.2,
+        "distinct_files": 5,
+        "found": [
+          "tagging-and-policies.md"
+        ],
+        "missed": [
+          "object-tagging.md"
+        ],
+        "retrieved": [
+          "AmazonS3/latest/userguide/tagging-and-policies.md",
+          "AmazonS3/latest/API/API_GetObjectTagging.md",
+          "AmazonS3/latest/userguide/buckets-tagging.md",
+          "AmazonS3/latest/userguide/tagging.md",
+          "AmazonS3/latest/userguide/example-bucket-policies.md"
+        ],
+        "id": "object-tagging-policies",
+        "difficulty": "medium",
+        "latency": 0.18860340118408203,
+        "top_score": 0.8324464780916455,
+        "score_spread": 0.04554990029119388
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "analytics-storage-class.md",
+          "configure-analytics-storage-class.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/analytics-storage-class.md",
+          "AmazonS3/latest/userguide/storage-class-intro.md",
+          "AmazonS3/latest/userguide/configure-analytics-storage-class.md",
+          "AmazonS3/latest/userguide/lifecycle-transition-general-considerations.md",
+          "AmazonS3/latest/userguide/WhatsNew.md"
+        ],
+        "id": "storage-class-analytics",
+        "difficulty": "medium",
+        "latency": 0.18824219703674316,
+        "top_score": 0.8338185309184756,
+        "score_spread": 0.09244272657595698
+      },
+      {
+        "recall": 1.0,
+        "primary_recall": 1.0,
+        "hit": 1.0,
+        "mrr": 1.0,
+        "precision": 0.4,
+        "distinct_files": 5,
+        "found": [
+          "UsingMetadata.md",
+          "add-object-metadata.md"
+        ],
+        "missed": [],
+        "retrieved": [
+          "AmazonS3/latest/userguide/UsingMetadata.md",
+          "AmazonS3/latest/userguide/add-object-metadata.md",
+          "AmazonS3/latest/userguide/metadata-tables-schema.md",
+          "AmazonS3/latest/userguide/metadata-tables-inventory-schema.md",
+          "AmazonS3/latest/userguide/WhatsNew.md"
+        ],
+        "id": "object-metadata",
+        "difficulty": "medium",
+        "latency": 0.19033193588256836,
+        "top_score": 0.8803561936396087,
+        "score_spread": 0.14894934370150892
+      }
+    ]
+  }
+}

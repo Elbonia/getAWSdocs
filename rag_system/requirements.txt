@@ -1,0 +1,23 @@
+llama-index>=0.14.0
+llama-index-core>=0.14.0
+llama-index-vector-stores-postgres>=0.8.0
+llama-index-llms-google-genai>=0.10.0
+llama-index-embeddings-google-genai>=0.6.0
+llama-index-embeddings-huggingface>=0.7.0
+psycopg2-binary>=2.9.0
+
+# Local embedding models (bge-m3, nomic, qwen3-0.6b). These arrive transitively via
+# llama-index-embeddings-huggingface, but are pinned here because the local
+# models depend on them directly:
+#   sentence-transformers - supplies the pooling/normalize stack; Qwen3
+#                           needs its last-token pooling to embed correctly
+#   einops                - required by nomic's trust_remote_code modeling file
+torch>=2.0.0
+transformers>=4.51.0
+sentence-transformers>=3.0.0
+einops>=0.8.0
+
+llama-index-llms-anthropic>=0.11.0
+anthropic<1.0.0
+llama-index-llms-huggingface>=0.4.0
+

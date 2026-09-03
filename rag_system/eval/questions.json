@@ -1,0 +1,503 @@
+{
+  "corpus": "documentation/markdown/AmazonS3",
+  "notes": [
+    "gold_files are the doc basenames that actually contain the answer, verified by",
+    "reading the corpus. They are the grading key: a model is measured on whether",
+    "retrieval surfaces these files, not on how the generated prose reads.",
+    "primary_files is the subset that is strictly necessary - a run that misses a",
+    "primary file cannot have answered the question from context.",
+    "A primary_files entry may be a nested list: any one of those files satisfies it."
+  ],
+  "questions": [
+    {
+      "id": "static-website",
+      "difficulty": "easy",
+      "question": "How do I host a static website on an Amazon S3 bucket?",
+      "gold_files": [
+        "EnableWebsiteHosting.md",
+        "WebsiteAccessPermissionsReqd.md",
+        "HostingWebsiteOnS3Setup.md",
+        "WebsiteHosting.md"
+      ],
+      "primary_files": [
+        "EnableWebsiteHosting.md",
+        [
+          "WebsiteAccessPermissionsReqd.md",
+          "HostingWebsiteOnS3Setup.md"
+        ]
+      ]
+    },
+    {
+      "id": "bucket-naming",
+      "difficulty": "easy",
+      "question": "What are the naming rules for a general purpose S3 bucket?",
+      "gold_files": [
+        "bucketnamingrules.md",
+        "BucketRestrictions.md"
+      ],
+      "primary_files": [
+        "bucketnamingrules.md"
+      ]
+    },
+    {
+      "id": "presigned-url",
+      "difficulty": "easy",
+      "question": "How do I share an S3 object with someone using a presigned URL?",
+      "gold_files": [
+        "ShareObjectPreSignedURL.md",
+        "using-presigned-url.md",
+        "PresignedUrlUploadObject.md"
+      ],
+      "primary_files": [
+        [
+          "ShareObjectPreSignedURL.md",
+          "using-presigned-url.md"
+        ]
+      ]
+    },
+    {
+      "id": "enable-versioning",
+      "difficulty": "easy",
+      "question": "How do I enable versioning on an S3 bucket?",
+      "gold_files": [
+        "manage-versioning-examples.md",
+        "Versioning.md"
+      ],
+      "primary_files": [
+        [
+          "manage-versioning-examples.md",
+          "Versioning.md"
+        ]
+      ]
+    },
+    {
+      "id": "cors",
+      "difficulty": "easy",
+      "question": "How do I configure CORS on an S3 bucket so a browser app can call it?",
+      "gold_files": [
+        "cors.md",
+        "cors-troubleshooting.md",
+        "ManageCorsUsing.md"
+      ],
+      "primary_files": [
+        "cors.md"
+      ]
+    },
+    {
+      "id": "transfer-acceleration",
+      "difficulty": "easy",
+      "question": "What is S3 Transfer Acceleration and how do I turn it on?",
+      "gold_files": [
+        "transfer-acceleration.md",
+        "transfer-acceleration-getting-started.md"
+      ],
+      "primary_files": [
+        "transfer-acceleration.md"
+      ]
+    },
+    {
+      "id": "requester-pays",
+      "difficulty": "easy",
+      "question": "How does Requester Pays work on an S3 bucket and who gets charged?",
+      "gold_files": [
+        "RequesterPaysBuckets.md",
+        "ObjectsinRequesterPaysBuckets.md"
+      ],
+      "primary_files": [
+        "RequesterPaysBuckets.md"
+      ]
+    },
+    {
+      "id": "server-access-logging",
+      "difficulty": "easy",
+      "question": "How do I enable server access logging for an S3 bucket?",
+      "gold_files": [
+        "enable-server-access-logging.md",
+        "ServerLogs.md"
+      ],
+      "primary_files": [
+        "enable-server-access-logging.md"
+      ]
+    },
+    {
+      "id": "storage-classes",
+      "difficulty": "medium",
+      "question": "What are the S3 storage classes and when should I use each one?",
+      "gold_files": [
+        "storage-class-intro.md",
+        "glacier-storage-classes.md",
+        "intelligent-tiering.md"
+      ],
+      "primary_files": [
+        "storage-class-intro.md"
+      ]
+    },
+    {
+      "id": "mpu-limits",
+      "difficulty": "medium",
+      "question": "What are the size limits for a multipart upload - maximum object size, part size, and number of parts?",
+      "gold_files": [
+        "qfacts.md",
+        "mpuoverview.md"
+      ],
+      "primary_files": [
+        "qfacts.md"
+      ]
+    },
+    {
+      "id": "block-public-access",
+      "difficulty": "medium",
+      "question": "What do the four S3 Block Public Access settings do, and how do bucket-level and account-level settings interact?",
+      "gold_files": [
+        "access-control-block-public-access.md",
+        "configuring-block-public-access-bucket.md",
+        "configuring-block-public-access-account.md"
+      ],
+      "primary_files": [
+        "access-control-block-public-access.md"
+      ]
+    },
+    {
+      "id": "object-lock-modes",
+      "difficulty": "medium",
+      "question": "What is the difference between S3 Object Lock governance mode and compliance mode, and how do legal holds differ from retention periods?",
+      "gold_files": [
+        "object-lock.md",
+        "object-lock-managing.md",
+        "object-lock-configure.md"
+      ],
+      "primary_files": [
+        "object-lock.md"
+      ]
+    },
+    {
+      "id": "checksums",
+      "difficulty": "medium",
+      "question": "Which checksum algorithms does S3 support for verifying object integrity on upload?",
+      "gold_files": [
+        "checking-object-integrity.md",
+        "checking-object-integrity-upload.md"
+      ],
+      "primary_files": [
+        "checking-object-integrity.md"
+      ]
+    },
+    {
+      "id": "event-notifications",
+      "difficulty": "medium",
+      "question": "What destinations can S3 event notifications be sent to, and which event types are supported?",
+      "gold_files": [
+        "notification-how-to-event-types-and-destinations.md",
+        "EventNotifications.md",
+        "how-to-enable-disable-notification-intro.md"
+      ],
+      "primary_files": [
+        [
+          "notification-how-to-event-types-and-destinations.md",
+          "EventNotifications.md"
+        ]
+      ]
+    },
+    {
+      "id": "encryption-options",
+      "difficulty": "medium",
+      "question": "What is the difference between SSE-S3, SSE-KMS, DSSE-KMS, and SSE-C server-side encryption in S3?",
+      "gold_files": [
+        "serv-side-encryption.md",
+        "UsingEncryption.md",
+        "UsingKMSEncryption.md",
+        "UsingDSSEncryption.md",
+        "ServerSideEncryptionCustomerKeys.md",
+        "UsingServerSideEncryption.md"
+      ],
+      "primary_files": [
+        [
+          "serv-side-encryption.md",
+          "UsingEncryption.md",
+          "UsingKMSEncryption.md"
+        ]
+      ]
+    },
+    {
+      "id": "abort-incomplete-mpu",
+      "difficulty": "hard",
+      "question": "I am being billed for storage I cannot see in the console. How do incomplete multipart uploads accumulate charges, and how do I clean them up automatically?",
+      "gold_files": [
+        "mpu-abort-incomplete-mpu-lifecycle-config.md",
+        "mpuoverview.md",
+        "abort-mpu.md",
+        "list-mpu.md"
+      ],
+      "primary_files": [
+        [
+          "mpu-abort-incomplete-mpu-lifecycle-config.md",
+          "mpuoverview.md"
+        ]
+      ]
+    },
+    {
+      "id": "lifecycle-transitions",
+      "difficulty": "hard",
+      "question": "What are the constraints on lifecycle transitions between storage classes, what minimum storage durations apply, and how are transition requests billed?",
+      "gold_files": [
+        "lifecycle-transition-general-considerations.md",
+        "intro-lifecycle-rules.md",
+        "lifecycle-expire-general-considerations.md",
+        "object-lifecycle-mgmt.md"
+      ],
+      "primary_files": [
+        "lifecycle-transition-general-considerations.md"
+      ]
+    },
+    {
+      "id": "crr-kms",
+      "difficulty": "hard",
+      "question": "I set up Cross-Region Replication on a versioning-enabled bucket whose objects are encrypted with SSE-KMS, but most objects never appear in the destination and my deletes aren't propagating either. Which objects does replication skip by default, what must I configure specifically for KMS-encrypted objects and for delete markers, and how do I get objects that already existed before I enabled the rule replicated?",
+      "gold_files": [
+        "replication-what-is-isnot-replicated.md",
+        "replication-config-for-kms-objects.md",
+        "delete-marker-replication.md",
+        "s3-batch-replication-batch.md"
+      ],
+      "primary_files": [
+        "replication-what-is-isnot-replicated.md",
+        "replication-config-for-kms-objects.md"
+      ]
+    },
+    {
+      "id": "glacier-restore",
+      "difficulty": "hard",
+      "question": "How do I restore an object archived in S3 Glacier Deep Archive, what retrieval options and retrieval times are available, and how long does the restored copy stay available?",
+      "gold_files": [
+        "restoring-objects.md",
+        "restoring-objects-retrieval-options.md",
+        "archived-objects.md",
+        "glacier-storage-classes.md"
+      ],
+      "primary_files": [
+        [
+          "restoring-objects-retrieval-options.md",
+          "restoring-objects.md"
+        ]
+      ]
+    },
+    {
+      "id": "delete-versioned",
+      "difficulty": "hard",
+      "question": "In a versioning-enabled bucket, what is the difference between deleting an object and deleting a specific object version, how do delete markers behave, and how do I permanently remove data?",
+      "gold_files": [
+        "DeletingObjectVersions.md",
+        "DeleteMarker.md",
+        "ManagingDelMarkers.md",
+        "DeletingObjectsfromVersioningSuspendedBuckets.md"
+      ],
+      "primary_files": [
+        "DeletingObjectVersions.md"
+      ]
+    },
+    {
+      "id": "mrap-failover",
+      "difficulty": "hard",
+      "question": "How do I configure active-passive failover for S3 Multi-Region Access Points (MRAP), how does request routing behave during a regional disruption, and what permissions are required to initiate a failover?",
+      "gold_files": [
+        "MultiRegionAccessPoints.md",
+        "MrapFailover.md",
+        "MultiRegionAccessPointRequestRouting.md"
+      ],
+      "primary_files": [
+        "MrapFailover.md",
+        "MultiRegionAccessPointRequestRouting.md"
+      ]
+    },
+    {
+      "id": "object-ownership-acls",
+      "difficulty": "hard",
+      "question": "How does turning on Bucket Owner Enforced for S3 Object Ownership disable ACLs, how are existing object permissions converted, and what prerequisites must be checked before migrating legacy buckets?",
+      "gold_files": [
+        "about-object-ownership.md",
+        "ensure-object-ownership.md",
+        "object-ownership-existing-bucket.md"
+      ],
+      "primary_files": [
+        "about-object-ownership.md",
+        "ensure-object-ownership.md"
+      ]
+    },
+    {
+      "id": "mfa-delete-protection",
+      "difficulty": "hard",
+      "question": "How does S3 MFA Delete protect objects from permanent destruction, which specific bucket and object actions require MFA tokens, and how must requests be formatted in the API or CLI?",
+      "gold_files": [
+        "MultiFactorAuthenticationDelete.md",
+        "DeletingObjectVersions.md",
+        "Versioning.md"
+      ],
+      "primary_files": [
+        "MultiFactorAuthenticationDelete.md"
+      ]
+    },
+    {
+      "id": "batch-ops-iam",
+      "difficulty": "hard",
+      "question": "How do S3 Batch Operations execute bulk tasks across millions of objects, what permissions must be granted in the job's IAM trust policy and execution policy, and how are job completion reports configured?",
+      "gold_files": [
+        "batch-ops-create-job.md",
+        "batch-ops-iam-role-policies.md",
+        "batch-ops.md"
+      ],
+      "primary_files": [
+        "batch-ops-iam-role-policies.md",
+        "batch-ops-create-job.md"
+      ]
+    },
+    {
+      "id": "storage-lens-metrics",
+      "difficulty": "hard",
+      "question": "What is S3 Storage Lens, how do Storage Lens advanced metrics and recommendations differ from free metrics, and how can Storage Lens metrics be published directly to CloudWatch?",
+      "gold_files": [
+        "storage-lens-groups-overview.md",
+        "storage-lens-cloudwatch-enable-publish-option.md",
+        "storage-lens-cloudwatch-metrics-dimensions.md"
+      ],
+      "primary_files": [
+        "storage-lens-cloudwatch-enable-publish-option.md",
+        "storage-lens-groups-overview.md"
+      ]
+    },
+    {
+      "id": "s3-express-networking",
+      "difficulty": "hard",
+      "question": "How do S3 Express One Zone directory buckets achieve single-digit millisecond latency, how does session-based authentication work with CreateSession, and how are bucket endpoints structured in Availability Zones?",
+      "gold_files": [
+        "s3-express-networking.md",
+        "s3-express-authenticating-authorizing.md",
+        "s3-express-Endpoints.md"
+      ],
+      "primary_files": [
+        "s3-express-networking.md",
+        "s3-express-authenticating-authorizing.md"
+      ]
+    },
+    {
+      "id": "access-grants-iam",
+      "difficulty": "hard",
+      "question": "How do S3 Access Grants integrate with IAM Identity Center to map corporate directory identities directly to S3 data access, and how do temporary credentials get issued for granted locations?",
+      "gold_files": [
+        "access-grants-concepts.md",
+        "access-grants-credentials.md",
+        "access-grants-grant-create.md"
+      ],
+      "primary_files": [
+        "access-grants-concepts.md",
+        "access-grants-credentials.md"
+      ]
+    },
+    {
+      "id": "storage-inventory-athena",
+      "difficulty": "hard",
+      "question": "How does S3 Inventory generate daily or weekly reports of object metadata, what formats and destination bucket policies are required, and how do you query inventory reports using Amazon Athena?",
+      "gold_files": [
+        "storage-inventory.md",
+        "configure-inventory.md",
+        "storage-inventory-athena-query.md"
+      ],
+      "primary_files": [
+        "storage-inventory.md",
+        "storage-inventory-athena-query.md"
+      ]
+    },
+    {
+      "id": "access-points-vpc",
+      "difficulty": "hard",
+      "question": "How do S3 Access Points restrict data access to specific VPC endpoints, how do access point policies differ from bucket policies, and how are network origin controls enforced?",
+      "gold_files": [
+        "access-points.md",
+        "creating-access-points.md",
+        "access-points-policies.md"
+      ],
+      "primary_files": [
+        "access-points.md",
+        "access-points-policies.md"
+      ]
+    },
+    {
+      "id": "s3-select-sql",
+      "difficulty": "hard",
+      "question": "How does S3 Select scan and filter data inside CSV, JSON, or Parquet objects without retrieving the entire file, what SQL clause restrictions apply, and how are query results streamed back?",
+      "gold_files": [
+        "selecting-content-from-objects.md",
+        "s3-select-sql-reference-select.md",
+        "s3-select-sql-reference-keyword-list.md"
+      ],
+      "primary_files": [
+        "selecting-content-from-objects.md",
+        "s3-select-sql-reference-select.md"
+      ]
+    },
+    {
+      "id": "upload-file",
+      "difficulty": "easy",
+      "question": "How do I upload an object or file to an Amazon S3 bucket using the console or AWS CLI?",
+      "gold_files": [
+        "upload-objects.md",
+        "GettingStartedS3CLI.md",
+        "GetStartedWithS3.md"
+      ],
+      "primary_files": [
+        [
+          "upload-objects.md",
+          "GettingStartedS3CLI.md"
+        ]
+      ]
+    },
+    {
+      "id": "bucket-tagging",
+      "difficulty": "easy",
+      "question": "How do I apply cost allocation tags to an S3 bucket to track storage costs in AWS Billing?",
+      "gold_files": [
+        "CostAllocTagging.md",
+        "BucketBilling.md"
+      ],
+      "primary_files": [
+        "CostAllocTagging.md"
+      ]
+    },
+    {
+      "id": "object-tagging-policies",
+      "difficulty": "medium",
+      "question": "How does S3 Object Tagging work, and how can object tags be used in bucket policies and IAM policies to control access?",
+      "gold_files": [
+        "object-tagging.md",
+        "tagging-and-policies.md"
+      ],
+      "primary_files": [
+        "object-tagging.md",
+        "tagging-and-policies.md"
+      ]
+    },
+    {
+      "id": "storage-class-analytics",
+      "difficulty": "medium",
+      "question": "What is S3 Storage Class Analysis, and how does it analyze storage access patterns to recommend when to transition objects to Standard-IA?",
+      "gold_files": [
+        "analytics-storage-class.md",
+        "configure-analytics-storage-class.md"
+      ],
+      "primary_files": [
+        "analytics-storage-class.md"
+      ]
+    },
+    {
+      "id": "object-metadata",
+      "difficulty": "medium",
+      "question": "What is the difference between system-defined and user-defined object metadata in Amazon S3, and how can metadata be set during upload?",
+      "gold_files": [
+        "UsingMetadata.md",
+        "add-object-metadata.md"
+      ],
+      "primary_files": [
+        "UsingMetadata.md"
+      ]
+    }
+  ]
+}
