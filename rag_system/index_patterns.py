@@ -7,6 +7,10 @@ Strategy:
   (Type: AWS::Serverless::Function, AWS::SQS::Queue, etc.) with Parameters & Outputs blocks.
 - Non-CloudFormation Code (CDK TypeScript/Python/Java, Terraform .tf, Python handlers, READMEs):
   Uses Qwen3-Embedding-0.6B with SentenceSplitter and Contextual Description Prefixing.
+- Splitter (--splitter): defaults to `sentence` (SentenceSplitter, the original behavior).
+  `code` routes each source file to an AST-aware CodeSplitter by language (falling back to
+  the sentence splitter for markdown/JSON/CFN docs and any file that fails to parse).
+  `code` mode requires the optional `tree-sitter-language-pack` dependency.
 - Batch Processing & Progress Tracking: Saves progress in .patterns_index_progress.json.
 - Logging: Real-time logging to stdout and index_patterns.log with ETA and throughput metrics.
 """
@@ -33,6 +37,23 @@ PROGRESS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".patte
 LOG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index_patterns.log")
 TABLE_SUFFIX = "patterns"
 MODEL_NAME = "qwen3-0.6b"
+
+# File extension -> tree-sitter-language-pack grammar name, used by --splitter code.
+# Anything not listed (README.md, *.json, *.tfvars, CFN resource docs) falls back to
+# the SentenceSplitter, which is also the default for every file when --splitter sentence.
+CODE_LANG_BY_EXT = {
+    ".py": "python",
+    ".ts": "typescript",
+    ".tsx": "typescript",
+    ".js": "javascript",
+    ".jsx": "javascript",
+    ".mjs": "javascript",
+    ".java": "java",
+    ".cs": "csharp",
+    ".go": "go",
+    ".graphql": "graphql",
+    ".tf": "hcl",
+}
 
 
 def setup_logger() -> logging.Logger:
@@ -225,10 +246,55 @@ def parse_cloudformation_template(
     return documents
 
 
+def make_code_splitter_factory():
+    """Return a cached factory that builds one CodeSplitter per tree-sitter language.
+
+    CodeSplitter constructs (and loads a grammar) eagerly, so instances are cached
+    and reused across pattern directories. Raises a clear ImportError if the optional
+    tree-sitter backend is not installed.
+    """
+    from llama_index.core.node_parser import CodeSplitter  # pylint: disable=import-outside-toplevel
+
+    cache: Dict[str, Any] = {}
+
+    def get(language: str):
+        if language not in cache:
+            cache[language] = CodeSplitter(language=language)
+        return cache[language]
+
+    return get
+
+
+def split_document(
+    doc: Document,
+    filepath: str,
+    use_code_splitter: bool,
+    sentence_splitter: SentenceSplitter,
+    code_factory,
+) -> List[Any]:
+    """Split one document into nodes, using the AST-aware CodeSplitter when applicable.
+
+    Falls back to the SentenceSplitter for unsupported file types and for any file
+    the language grammar cannot parse (partial snippets, unusual syntax).
+    """
+    if use_code_splitter:
+        language = CODE_LANG_BY_EXT.get(os.path.splitext(filepath)[1].lower())
+        if language:
+            try:
+                return code_factory(language).get_nodes_from_documents([doc])
+            except Exception as exc:  # pylint: disable=broad-exception-caught
+                LOGGER.warning(
+                    "CodeSplitter (%s) failed for %s; falling back to sentence splitter: %s",
+                    language, filepath, exc,
+                )
+    return sentence_splitter.get_nodes_from_documents([doc])
+
+
 def index_patterns(
     patterns_dir: str = BASE_PATTERNS_DIR,
     table_suffix: str = TABLE_SUFFIX,
     model_name: str = MODEL_NAME,
+    splitter: str = "sentence",
 ):  # pylint: disable=too-many-statements,too-many-locals,too-many-branches
     """Batch index all pattern directories into PostgreSQL pgvector."""
     LOGGER.info("Starting Serverless Patterns indexing process...")
@@ -249,7 +315,26 @@ def index_patterns(
     LOGGER.info("Found %d pattern directories to index into table 'data_%s'.", total_dirs, table_name)
 
     progress = load_progress()
-    code_splitter = SentenceSplitter(chunk_size=1024, chunk_overlap=128)
+    sentence_splitter = SentenceSplitter(chunk_size=1024, chunk_overlap=128)
+
+    use_code_splitter = splitter == "code"
+    code_factory = None
+    if use_code_splitter:
+        try:
+            code_factory = make_code_splitter_factory()
+            code_factory("python")  # Preflight: fail fast if the grammar backend is missing.
+        except ImportError:
+            LOGGER.error(
+                "--splitter code requires the tree-sitter backend. Install it with: "
+                "pip install 'tree-sitter-language-pack<1.0'"
+            )
+            sys.exit(1)
+        LOGGER.info(
+            "Splitter: code (AST-aware CodeSplitter for %s; sentence-splitter fallback otherwise).",
+            ", ".join(sorted(set(CODE_LANG_BY_EXT.values()))),
+        )
+    else:
+        LOGGER.info("Splitter: sentence (SentenceSplitter chunk_size=1024, overlap=128).")
 
     start_time = time.time()
     indexed_count = 0
@@ -317,14 +402,15 @@ def index_patterns(
 
         pattern_nodes = []
 
-        # 1. Process CloudFormation / SAM templates using CloudFormation Resource Splitter
+        # 1. Process CloudFormation / SAM templates using CloudFormation Resource Splitter.
+        # These synthesized YAML+header docs are already atomic, so they always use the
+        # sentence splitter (no single code grammar fits, and the header breaks AST parsing).
         for cfn_file in cfn_templates:
             cfn_docs = parse_cloudformation_template(cfn_file, metadata)
             for doc in cfn_docs:
-                pattern_nodes.extend(code_splitter.get_nodes_from_documents([doc]))
+                pattern_nodes.extend(sentence_splitter.get_nodes_from_documents([doc]))
 
-        # 2. Process non-CloudFormation code (CDK TypeScript/Python, Terraform, READMEs) using Qwen3
-        other_docs = []
+        # 2. Process non-CloudFormation code (CDK TypeScript/Python, Terraform, READMEs).
         for filepath in other_files:
             try:
                 with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
@@ -333,23 +419,32 @@ def index_patterns(
                 if not content.strip():
                     continue
 
-                enriched_text = context_header + content
-                doc = Document(
-                    text=enriched_text,
-                    metadata={
-                        "file_path": filepath,
-                        "folder": metadata["folder"],
-                        "title": metadata["title"],
-                        "framework": metadata["framework"],
-                        "type": "code_doc",
-                    },
+                # In code mode, code-language files are fed raw to the AST splitter (the
+                # prose header would corrupt the parse), so the pattern context is carried
+                # in metadata instead. All other files keep the in-text context prefix.
+                ext = os.path.splitext(filepath)[1].lower()
+                file_uses_code = use_code_splitter and ext in CODE_LANG_BY_EXT
+                doc_meta = {
+                    "file_path": filepath,
+                    "folder": metadata["folder"],
+                    "title": metadata["title"],
+                    "framework": metadata["framework"],
+                    "type": "code_doc",
+                }
+                if file_uses_code:
+                    text = content
+                    doc_meta["summary"] = metadata["description"]
+                else:
+                    text = context_header + content
+                doc = Document(text=text, metadata=doc_meta)
+
+                pattern_nodes.extend(
+                    split_document(
+                        doc, filepath, use_code_splitter, sentence_splitter, code_factory
+                    )
                 )
-                other_docs.append(doc)
             except Exception as exc:  # pylint: disable=broad-exception-caught
                 LOGGER.error("Error reading %s: %s", filepath, exc)
-
-        if other_docs:
-            pattern_nodes.extend(code_splitter.get_nodes_from_documents(other_docs))
 
         if pattern_nodes:
             total_nodes_count += len(pattern_nodes)
@@ -403,12 +498,24 @@ def main():
         default=MODEL_NAME,
         help="Embedding model name (default: qwen3-0.6b)",
     )
+    parser.add_argument(
+        "--splitter",
+        default="sentence",
+        choices=["sentence", "code"],
+        help=(
+            "Chunking strategy. 'sentence' (default) uses the SentenceSplitter for all files "
+            "(original behavior). 'code' uses an AST-aware CodeSplitter per language, falling "
+            "back to the sentence splitter for markdown/JSON/CFN docs and unparseable files "
+            "(requires: pip install 'tree-sitter-language-pack<1.0')."
+        ),
+    )
     args = parser.parse_args()
 
     index_patterns(
         patterns_dir=args.patterns_dir,
         table_suffix=args.table_suffix,
         model_name=args.model,
+        splitter=args.splitter,
     )
 
 

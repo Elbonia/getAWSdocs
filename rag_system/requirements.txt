@@ -6,6 +6,10 @@ llama-index-embeddings-google-genai>=0.6.0
 llama-index-embeddings-huggingface>=0.7.0
 psycopg2-binary>=2.9.0
 
+# cfn_flip: splits CloudFormation / SAM templates into atomic Resource blocks
+# for the serverless-patterns indexer (index_patterns.py).
+cfn-flip>=1.3.0
+
 # Local embedding models (bge-m3, nomic, qwen3-0.6b). These arrive transitively via
 # llama-index-embeddings-huggingface, but are pinned here because the local
 # models depend on them directly:
@@ -22,4 +26,5 @@ anthropic<1.0.0
 llama-index-llms-huggingface>=0.4.0
 mcp>=2.0.0
 
-
+# Optional: only needed for `index_patterns.py --splitter code` (AST-aware CodeSplitter).
+# tree-sitter-language-pack<1.0
