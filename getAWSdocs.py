@@ -3,6 +3,8 @@
 import argparse
 import json
 import os
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urljoin, urlparse, urlsplit
 from urllib.request import urlopen
@@ -15,6 +17,52 @@ URL_TIMEOUT = 20
 # against the full AWS docs catalog touches many thousands of URLs, so a
 # higher worker count matters a lot more here than for a handful of files.
 MAX_WORKERS = 16
+# Default cap on total request throughput, in requests per second, applied
+# across all workers combined (overridable with --rate). This is a
+# politeness/rate limit, not a performance target: with MAX_WORKERS threads
+# all issuing requests, an uncapped run can hammer docs.aws.amazon.com hard
+# enough to get throttled or blocked.
+DEFAULT_RATE = 3.0
+# Hard ceiling on --rate. docs.aws.amazon.com is a shared public service;
+# anything above this is treated as an error rather than silently clamped so
+# the caller knows their setting was rejected.
+MAX_RATE = 16.0
+
+
+class RateLimiter:
+    """Thread-safe cap on request throughput, shared across every worker.
+
+    All network fetches acquire from a single instance, so the cap holds
+    globally rather than per thread pool. Each caller reserves the next
+    evenly-spaced slot under the lock and then sleeps outside it, so workers
+    still overlap on network latency while requests leave at the target rate.
+    """
+
+    def __init__(self, max_per_second):
+        self.min_interval = 1.0 / max_per_second if max_per_second > 0 else 0.0
+        self._lock = threading.Lock()
+        self._next_time = 0.0
+
+    def acquire(self):
+        if self.min_interval <= 0:
+            return
+        with self._lock:
+            now = time.monotonic()
+            scheduled = max(now, self._next_time)
+            self._next_time = scheduled + self.min_interval
+        wait = scheduled - now
+        if wait > 0:
+            time.sleep(wait)
+
+
+# Configured from --rate in main() before any fetching begins.
+_rate_limiter = RateLimiter(DEFAULT_RATE)
+
+
+def fetch(url, timeout=URL_TIMEOUT):
+    """Rate-limited wrapper around urlopen used for every network request."""
+    _rate_limiter.acquire()
+    return urlopen(url, timeout=timeout)
 
 
 def get_options():
@@ -39,7 +87,21 @@ def get_options():
     parser.add_argument(
         "-f", "--force", help="Overwrite old files", action="store_true", required=False
     )
+    parser.add_argument(
+        "-r",
+        "--rate",
+        help="Maximum requests per second across all workers "
+        "(default: %(default)s, must be > 0 and <= " + str(int(MAX_RATE)) + ")",
+        type=float,
+        default=DEFAULT_RATE,
+        required=False,
+    )
     args = parser.parse_args()
+    if args.rate <= 0 or args.rate > MAX_RATE:
+        parser.error(
+            "--rate must be greater than 0 and at most %g (got %g)"
+            % (MAX_RATE, args.rate)
+        )
     if not args.documentation and not args.whitepapers:
         parser.print_help()
     return vars(args)
@@ -47,7 +109,7 @@ def get_options():
 
 # Build a list of the amazon PDF's
 def list_whitepaper_pdfs(start_page):
-    html_page = urlopen(start_page, timeout=URL_TIMEOUT)
+    html_page = fetch(start_page, timeout=URL_TIMEOUT)
     # Parse the HTML page
     soup = BeautifulSoup(html_page, "html.parser")
     pdfs = set()
@@ -74,7 +136,7 @@ def find_pdfs_in_html(url):
     meta-inf/guide-info.json lookup can't discover.
     """
     try:
-        page = urlopen(url, timeout=URL_TIMEOUT)
+        page = fetch(url, timeout=URL_TIMEOUT)
         soup = BeautifulSoup(page, "html.parser")
         return {
             urljoin(url, link.get("href").split("?")[0])
@@ -89,7 +151,7 @@ def get_guide_pdf(guide_url, base_url):
     guide_info_url = urljoin(guide_url, "meta-inf/guide-info.json")
     try:
         print("Guide info url:", guide_info_url)
-        guide_info_doc = urlopen(guide_info_url, timeout=URL_TIMEOUT).read()
+        guide_info_doc = fetch(guide_info_url, timeout=URL_TIMEOUT).read()
         guide_info = json.loads(guide_info_doc)
         if "pdf" in guide_info and guide_info["pdf"]:
             return urljoin(base_url, guide_info["pdf"])
@@ -100,7 +162,7 @@ def get_guide_pdf(guide_url, base_url):
 
 def list_guide_urls(service_url, base_url):
     guide_urls = set()
-    service_page = urlopen(service_url, timeout=URL_TIMEOUT)
+    service_page = fetch(service_url, timeout=URL_TIMEOUT)
     service_soup = BeautifulSoup(service_page, "html.parser")
     for guide_link in service_soup.find_all("a", href=True):
         guide_url = urljoin(base_url, guide_link.get("href").split("?")[0])
@@ -121,7 +183,7 @@ def list_guide_urls(service_url, base_url):
 def get_guide_html_pages(guide_url, base_url):
     sitemap_url = urljoin(guide_url, "sitemap.xml")
     try:
-        sitemap_doc = urlopen(sitemap_url, timeout=URL_TIMEOUT).read()
+        sitemap_doc = fetch(sitemap_url, timeout=URL_TIMEOUT).read()
         soup = BeautifulSoup(sitemap_doc, "xml")
         return {loc.text.strip() for loc in soup.find_all("loc") if loc.text}
     except Exception:
@@ -156,7 +218,7 @@ def _legacy_tile_guide_urls(uri, service_url, base_url, locale_path):
             url = base_url + uri.split("?")[0] + locale_path + "landing-page.xml"
         else:
             url = uri.split("?")[0]
-        sub_page_doc = urlopen(url, timeout=URL_TIMEOUT)
+        sub_page_doc = fetch(url, timeout=URL_TIMEOUT)
         soup_doc = BeautifulSoup(sub_page_doc, "xml")
         for sublink in soup_doc.find_all("tile"):
             try:
@@ -213,7 +275,7 @@ def list_docs_files(start_page, get_guide_files):
     locale_path = "en_us/"
     base_url = "https://docs.aws.amazon.com"
 
-    page = urlopen(start_page, timeout=URL_TIMEOUT)
+    page = fetch(start_page, timeout=URL_TIMEOUT)
     soup = BeautifulSoup(page, "xml")
     files = set()
     print("Generating file list (this may take some time)")
@@ -289,7 +351,7 @@ def save_pdf(full_dir, filename, i, force):
         if i.startswith("//"):
             i = "http:" + i
         print("Downloading : " + i)
-        with urlopen(i, timeout=URL_TIMEOUT) as web:
+        with fetch(i, timeout=URL_TIMEOUT) as web:
             print("Saving to : " + file_loc)
             # Save Data to disk
             with open(file_loc, "wb") as output:
@@ -361,6 +423,9 @@ def main():
     args = get_options()
     # allow user to overwrite files
     force = args["force"]
+    # Configure the shared rate limiter before any fetching begins.
+    global _rate_limiter
+    _rate_limiter = RateLimiter(args["rate"])
     pdf_list = set()
     if args["documentation"]:
         print("Downloading Docs")
