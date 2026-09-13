@@ -21,6 +21,30 @@ example:
 sudo pip install -r requirements.txt
 ```
 
+## Development
+
+Python code in this repo must be formatted with [yapf](https://github.com/google/yapf) using the **Google** style before check-in. The style is pinned in `.style.yapf` (`based_on_style = google`), so no extra flags are needed.
+
+Install the development tools:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+Format the code (either invoke yapf directly, or let the git hook do it):
+
+```bash
+yapf -i getAWSdocs.py
+```
+
+A [pre-commit](https://pre-commit.com/) hook is provided in `.pre-commit-config.yaml` to enforce this automatically on every commit. Enable it once with:
+
+```bash
+pre-commit install
+```
+
+After that, `yapf` runs on staged Python files each time you commit; a commit that would leave unformatted code is blocked until you re-stage the reformatted files.
+
 ## Usage
 
 To get all documents as PDFs:

@@ -1,0 +1,4 @@
+# Development-only dependencies (not needed to run getAWSdocs.py).
+# Install with: pip install -r requirements-dev.txt
+yapf>=0.43.0
+pre-commit>=3.0.0
