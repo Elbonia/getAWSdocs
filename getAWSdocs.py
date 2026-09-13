@@ -70,7 +70,8 @@ def get_options():
     parser.add_argument(
         "-d",
         "--documentation",
-        help="Download the Documentation, optionally as 'pdf' (default), 'html' or 'md'",
+        help=
+        "Download the Documentation, optionally as 'pdf' (default), 'html' or 'md'",
         nargs="?",
         const="pdf",
         default=None,
@@ -84,9 +85,11 @@ def get_options():
         action="store_true",
         required=False,
     )
-    parser.add_argument(
-        "-f", "--force", help="Overwrite old files", action="store_true", required=False
-    )
+    parser.add_argument("-f",
+                        "--force",
+                        help="Overwrite old files",
+                        action="store_true",
+                        required=False)
     parser.add_argument(
         "-r",
         "--rate",
@@ -98,10 +101,8 @@ def get_options():
     )
     args = parser.parse_args()
     if args.rate <= 0 or args.rate > MAX_RATE:
-        parser.error(
-            "--rate must be greater than 0 and at most %g (got %g)"
-            % (MAX_RATE, args.rate)
-        )
+        parser.error("--rate must be greater than 0 and at most %g (got %g)" %
+                     (MAX_RATE, args.rate))
     if not args.documentation and not args.whitepapers:
         parser.print_help()
     return vars(args)
@@ -139,7 +140,8 @@ def find_pdfs_in_html(url):
         page = fetch(url, timeout=URL_TIMEOUT)
         soup = BeautifulSoup(page, "html.parser")
         return {
-            urljoin(url, link.get("href").split("?")[0])
+            urljoin(url,
+                    link.get("href").split("?")[0])
             for link in soup.find_all("a", href=True)
             if link.get("href").split("?")[0].endswith("pdf")
         }
@@ -197,7 +199,7 @@ def get_guide_md_pages(guide_url, base_url):
     # are dropped rather than downloaded as-is and mislabeled with a .md
     # extension.
     return {
-        page[: -len(".html")] + ".md"
+        page[:-len(".html")] + ".md"
         for page in get_guide_html_pages(guide_url, base_url)
         if page.endswith(".html")
     }
@@ -215,7 +217,8 @@ def _legacy_tile_guide_urls(uri, service_url, base_url, locale_path):
     guide_urls = set()
     try:
         if not uri.startswith("http"):
-            url = base_url + uri.split("?")[0] + locale_path + "landing-page.xml"
+            url = base_url + uri.split(
+                "?")[0] + locale_path + "landing-page.xml"
         else:
             url = uri.split("?")[0]
         sub_page_doc = fetch(url, timeout=URL_TIMEOUT)
@@ -224,8 +227,7 @@ def _legacy_tile_guide_urls(uri, service_url, base_url, locale_path):
             try:
                 sub_url = sublink.get("href")
                 directory = base_url + "/".join(
-                    urlsplit(sub_url).path.split("/")[:-1]
-                )
+                    urlsplit(sub_url).path.split("/")[:-1])
                 guide_urls.add(directory + "/")
             except Exception:
                 continue
@@ -261,7 +263,8 @@ def _resolve_service_guides(uri, base_url, locale_path, is_pdf_mode):
         # An empty result here is not an error (BeautifulSoup finding zero
         # matching anchors doesn't raise), so this fallback must be tried
         # whenever nothing was found, not only when list_guide_urls() raises.
-        guide_urls = _legacy_tile_guide_urls(uri, service_url, base_url, locale_path)
+        guide_urls = _legacy_tile_guide_urls(uri, service_url, base_url,
+                                             locale_path)
         if not guide_urls:
             print("No guide links or legacy tiles found for " + service_url)
 
@@ -297,10 +300,8 @@ def list_docs_files(start_page, get_guide_files):
     guide_urls = set()
     with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
         future_to_uri = {
-            executor.submit(
-                _resolve_service_guides, uri, base_url, locale_path, is_pdf_mode
-            ): uri
-            for uri in uris
+            executor.submit(_resolve_service_guides, uri, base_url, locale_path, is_pdf_mode):
+                uri for uri in uris
         }
         for future in as_completed(future_to_uri):
             try:
@@ -324,7 +325,8 @@ def list_docs_files(start_page, get_guide_files):
             try:
                 files.update(future.result())
             except Exception as exc:
-                print("Skipping guide " + future_to_guide[future] + " - " + str(exc))
+                print("Skipping guide " + future_to_guide[future] + " - " +
+                      str(exc))
 
     print("Found " + str(len(files)) + " documentation files")
     return files
@@ -358,9 +360,8 @@ def save_pdf(full_dir, filename, i, force):
                 output.write(web.read())
     else:
         print(
-            "Skipping "
-            + i
-            + " - file exists or is a dated API document, use './getAWSdocs.py --force' to force override"
+            "Skipping " + i +
+            " - file exists or is a dated API document, use './getAWSdocs.py --force' to force override"
         )
 
 
@@ -442,11 +443,13 @@ def main():
 
     if args["whitepapers"]:
         print("Downloading Whitepapaers")
-        whitepaper_pdf_list = list_whitepaper_pdfs("http://aws.amazon.com/whitepapers/")
+        whitepaper_pdf_list = list_whitepaper_pdfs(
+            "http://aws.amazon.com/whitepapers/")
         pdf_list.update(whitepaper_pdf_list)
         get_pdfs(whitepaper_pdf_list, force)
         print("Downloading SAP Whitepapaers")
-        sap_pdf_list = list_whitepaper_pdfs("https://aws.amazon.com/sap/whitepapers/")
+        sap_pdf_list = list_whitepaper_pdfs(
+            "https://aws.amazon.com/sap/whitepapers/")
         pdf_list.update(sap_pdf_list)
         get_pdfs(sap_pdf_list, force)
 
