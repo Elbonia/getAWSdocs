@@ -58,6 +58,16 @@ Files that exist on disk will not be re-downloaded (so by default only new secti
 
 __Note:__ You can use a combination of -d and -w to download all documents at once.
 
+### Limiting the request rate
+
+The crawl throttles itself to a maximum number of requests per second, shared across all workers, so a full run stays polite toward docs.aws.amazon.com. The default is **3 req/sec**. Change it with `-r`/`--rate`:
+
+```bash
+./getAWSdocs.py -d -r 8
+```
+
+The rate must be greater than 0 and at most 16; anything outside that range aborts with an error. See [Speed](#speed) for how this interacts with the worker count.
+
 ## How it works
 
 For documentation (`-d`), the script walks the AWS docs catalogue in stages:
@@ -73,6 +83,11 @@ For whitepapers (`-w`) discovery is simpler: it scrapes two AWS whitepapers inde
 
 Discovery is thousands of small HTTP requests, and the work is dominated by network round-trip latency rather than bandwidth or CPU. To keep the total time reasonable across 390+ guides, the crawl runs concurrently: service resolution, per-guide file discovery, and downloads each use a thread pool (`MAX_WORKERS = 16`). Even so, a full run - especially the `html`/`md` modes, which pull every page of every guide - still touches an enormous number of URLs and can take a long time.
 
-The worker count is a deliberately modest 16 to balance speed against politeness toward docs.aws.amazon.com; raising it too far risks getting your IP rate-limited or having the traffic flagged as abusive.
+Two separate knobs govern the traffic, and they do different things:
+
+ - **`--rate` (requests per second, default 3)** caps *throughput* - how many requests start each second, across all workers combined. This is the politeness throttle, and it is the binding limit for a typical run. It must be `> 0` and `<= 16`; a higher value aborts with an error.
+ - **`MAX_WORKERS = 16`** caps *concurrency* - how many requests are in flight at once. Because each request blocks on network latency, you need several workers in parallel just to reach the target rate; the pool is also what stops an enormous number of requests launching at once. At the default rate the rate limiter binds first and most of the pool sits idle.
+
+Raising the rate too far risks getting your IP rate-limited or having the traffic flagged as abusive, which is why it is capped at 16.
 
 That's it!
